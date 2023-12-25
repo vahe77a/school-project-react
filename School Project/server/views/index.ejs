@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Server API</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container" style="padding:20px">
+        <div class="row">
+            <h1 class="display-6 text-center">Auth Requests</h1>
+            <table class="table table-bordered  my-2 ">
+                <thead>
+                    <tr>
+                        <th>type</th>
+                        <th>path</th>
+                        <th>parameter</th>
+                        <th>body</th>
+                        <th>role</th>
+                        <th>result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>post</td>
+                        <td>/login</td>
+                        <td></td>
+                        <td><code>{login, password}</code></td>
+                        <td><sub>կատարում է login փոխանցված տվյալներով</sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>get</td>
+                        <td>/auth</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub>վերադարձնում է տվյալ պահին լոգին եղած user-ին, եթե այդպիսին կա</sub></td>
+                        <td class="text-dark">{user:{}}</td>
+                    </tr>
+                    <tr>
+                        <td>get</td>
+                        <td>/logout</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub>կատարում է logout</sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="height:100px"></div>
+            <h1 class="display-6 text-center">Admin Requests</h1>
+            <table class="table table-bordered  my-2 ">
+                <thead>
+                    <tr>
+                        <th>type</th>
+                        <th>path</th>
+                        <th>parameter</th>
+                        <th>body</th>
+                        <th>role</th>
+                        <th>result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   <tr>
+                    <td class="bg-warning">get</td>
+                    <td>/users</td>
+                    <td><code></code></td>
+                    <td><code></code></td>
+                    <td>Վերադարձնում է բոլոր user-ների տվյալները</td>
+                    <td class=" bg-info"><code class=" text-dark">
+                        <pre style="margin-left:-150px">
+                        {
+                            status:[ok/error{message}], 
+                            users:[{}]
+                        }
+                    </pre>
+                    </code></td>
+                   </tr>
+                   <tr>
+                    <td class="bg-success">post</td>
+                    <td>/addUser</td>
+                    <td><code></code></td>
+                    <td><code class="">{name, surname, login, password, type}</code></td>
+                    <td>Ավելացնում է նոր  user, եթե լոգինը զբաղված չէ. <br><small>body-ն բարեհաջող ավելացված user օբյեկտն է</small></td>
+                    <td class=" bg-info"><code class="text-dark">
+                        <pre style="margin-left:-180px">
+                            {
+                                status:[ok/error{message}], 
+                                body:{}
+                            }
+                        </pre></code></td>
+                   </tr>
+                   <tr>
+                    <td class="bg-danger">delete</td>
+                    <td>/user</td>
+                    <td><code>{id}</code></td>
+                    <td><code class=""></code></td>
+                    <td>հեռացնում է տվյալ id -ով user-ին</td>
+                    <td class=" bg-info"><code class="text-dark">
+                        <pre style="margin-left:-180px">
+                            {
+                                status:[ok/error{message}],
+                                id 
+                            }
+                        </pre></code></td>
+                   </tr>
+                   <tr>
+                    <td class="bg-warning">get</td>
+                    <td>/groups</td>
+                    <td><code></code></td>
+                    <td><code></code></td>
+                    <td>Վերադարձնում է բոլոր խմբերի տվյալները</td>
+                    <td class=" bg-info"><code class=" text-dark">
+                        <pre style="margin-left:-150px">
+                        {
+                            status:[ok/error{message}], 
+                            groups:[{}],
+                            teachers:[{}],
+                            availableStudents:[{}]
+                        }
+                    </pre>
+                    </code></td>
+                   </tr>
+                   <tr>
+                        <td class="bg-warning">get</td>
+                        <td>/teachers</td>
+                        <td><code></code></td>
+                        <td><code></code></td>
+                        <td>Վերադարձնում է բոլոր ուսուցիչների տվյալները</td>
+                        <td class=" bg-info"><code class=" text-dark">
+                            <pre style="margin-left:-150px">
+                            {
+                                status:[ok/error{message}], 
+                                teachers:[{}]
+                            }
+                        </pre>
+                        </code></td>
+                   </tr>
+                   <tr>
+                    <td class="bg-warning">get</td>
+                    <td>/students</td>
+                    <td><code></code></td>
+                    <td><code></code></td>
+                    <td>Վերադարձնում է բոլոր աշակերտների տվյալները</td>
+                    <td class=" bg-info"><code class=" text-dark">
+                        <pre style="margin-left:-150px">
+                        {
+                            status:[ok/error{message}], 
+                            students:[{}]
+                        }
+                    </pre>
+                    </code></td>
+                 </tr>
+                 <tr>
+                    <td class="bg-success">post</td>
+                    <td>/addGroup</td>
+                    <td><code></code></td>
+                    <td><code class="">{<br>name,<br> teacher:number,<br> students:[]number<br>
+                            schedule:"v1|v2"<br>
+                            hours:"v1|v2|v3|v4|v5"<br>
+                        }</code></td>
+                    <td>Ավելացնում է նոր  խումբ, եթե նման անունով խումբ արդեն չկա </td>
+                    <td class=" bg-info"><code class="text-dark">
+                        <pre style="margin-left:-180px">
+                            {
+                                status:[ok/error{message}], 
+                                body:{}
+                            }
+                        </pre></code></td>
+                   </tr>
+
+                   <tr>
+                    <td class="bg-danger">delete</td>
+                    <td>/group</td>
+                    <td><code>{id}</code></td>
+                    <td><code class=""></code></td>
+                    <td>ջնջում է տվյալ id-ով խումբը</td>
+                    <td class=" bg-info"><code class="text-dark">
+                        <pre style="margin-left:-180px">
+                            {
+                                status:[ok/error{message}], 
+                                id,
+                                availableStudents:[{}]
+                            }
+                        </pre></code></td>
+                   </tr>
+                   <tr>
+                    <td class="bg-info">put</td>
+                    <td>/updateStudent</td>
+                    <td><code>{id}</code></td>
+                    <td><code class="">{name:string, surname:string, group:number}</code></td>
+                    <td>փոփոխում է ուսանողի տվյալները և վերադարձնում փոփոխվածը: group դաշտի համար ուղարկեք -1,  եթե ցանկանում եք ուսանողին հանել խմբից</td>
+                    <td class=" bg-info"><code class="text-dark">
+                        <pre style="margin-left:-180px">
+                            {
+                                status:[ok/error{message}], 
+                                body:{}
+                            }
+                        </pre></code></td>
+                   </tr>
+                   <tr>
+                    <td class="bg-info">put</td>
+                    <td>/changeGroupTeacher</td>
+                    <td><code></code></td>
+                    <td><code class="">{group:number, teacher:number}</code></td>
+                    <td>փոխում է տվյալ խմբի դասախոսին:  Վերադարձնում նոր խմբի տվյալը.</td>
+                    <td class=" bg-info"><code class="text-dark">
+                        <pre style="margin-left:-180px">
+                            {
+                                status:[ok/error{message}], 
+                                body:{}
+                            }
+                        </pre></code></td>
+                   </tr>
+                   
+                </tbody>
+            </table>
+            <div style="height:100px"></div>
+
+            <h1 class="display-6 text-center">Teacher Requests</h1>
+            <table class="table table-bordered  my-2 ">
+                <thead>
+                    <tr>
+                        <th>type</th>
+                        <th>path</th>
+                        <th>parameter</th>
+                        <th>body</th>
+                        <th>role</th>
+                        <th>result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-success">post</td>
+                        <td>/addTest</td>
+                        <td><code></code></td>
+                        <td><code class="">{name:"", questions:[]}</code></td>
+                        <td>Ավելացնում է նոր  թեստ<br><small></small></td>
+                        <td class=" bg-info"><code class="text-dark">
+                            <pre style="margin-left:-180px">
+                                {
+                                    status:[ok/error{message}], 
+                                    body:{}
+                                }
+                            </pre></code></td>
+                       </tr>
+
+                       <tr>
+                        <td class="bg-success">post</td>
+                        <td>/evaluate/:group/:lesson/:student</td>
+                        <td><code>{group, lesson, student}</code></td>
+                        <td><code class="">{value}</code></td>
+                        <td>Ավելացնում է նոր  գնահատական<br><small></small></td>
+                        <td class=" bg-info"><code class="text-dark">
+                            <pre style="margin-left:-180px">
+                                {
+                                    status:[ok/error{message}], 
+                                    body:{}
+                                }
+                            </pre></code></td>
+                       </tr>
+                       <tr>
+                        <td  class="bg-warning">get</td>
+                        <td>/values/:group</td>
+                        <td> {group}</td>
+                        <td><code></code></td>
+                        <td>վերադարձնում է խմբի գնահատականները</td>
+                        <td class="text-dark">{result:[]}</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-success">post</td>
+                        <td>/addHomework</td>
+                        <td><code></code></td>
+                        <td><code class="">{title, content, group}</code></td>
+                        <td>Ավելացնում է տնային առաջադրանք</td>
+                        <td class=" bg-info"><code class="text-dark">
+                            <pre style="margin-left:-180px">
+                                {
+                                    status:[ok/error{message}], 
+                                    result:{}
+                                }
+                            </pre></code></td>
+                       </tr>
+
+
+                       <tr>
+                        <td  class="bg-warning">get</td>
+                        <td>/getHomeworks/:group</td>
+                        <td> {group}</td>
+                        <td><code></code></td>
+                        <td>վերադարձնում է տնային առաջադրանքները</td>
+                        <td class="text-dark">{result:[]}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/deleteHomework</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/evaluateStudent</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/createTest</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/editTest</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/deleteTest</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/addQuestion</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/shareTest</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/evaluateExamen</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                
+                
+                </tbody>
+            </table>
+            <div style="height:100px"></div>
+
+            <h1 class="display-6 text-center">Student Requests</h1>
+            <table class="table table-bordered  my-2 ">
+                <thead>
+                    <tr>
+                        <th>type</th>
+                        <th>path</th>
+                        <th>parameter</th>
+                        <th>body</th>
+                        <th>role</th>
+                        <th>result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-warning">get</td>
+                        <td>/allTests</td>
+                        <td><code></code></td>
+                        <td><code></code></td>
+                        <td>Վերադարձնում է բոլոր test-երը</td>
+                        <td class=" bg-info"><code class=" text-dark">
+                            <pre style="margin-left:-150px">
+                            {
+                                tests:[{}]
+                            }
+                        </pre>
+                        </code></td>
+                       </tr>
+                       <tr>
+                        <td class="bg-warning">get</td>
+                        <td>/checkQuestion/:test/:quest</td>
+                        <td><code>{:test, :quest}</code></td>
+                        <td><code></code></td>
+                        <td>Վերադարձնում տվյալ թեստի տվյալ հարցի ճիշտ պատասխանը</td>
+                        <td class=" bg-info"><code class=" text-dark">
+                            <pre style="margin-left:-150px">
+                            {
+                               result:{}
+                            }
+                        </pre>
+                        </code></td>
+                       </tr>
+                       <tr>
+                        <td class="bg-warning">get</td>
+                        <td>/test/:id</td>
+                        <td><code>{id}</code></td>
+                        <td><code></code></td>
+                        <td>Վերադարձնում է տվյալ id -ով test-ը</td>
+                        <td class=" bg-info"><code class=" text-dark">
+                            <pre style="margin-left:-150px">
+                            {
+                                result:[{} || null]
+                            }
+                        </pre>
+                        </code></td>
+                       </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/getLessons</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/sendHomework</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/getClassBook</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/addCommentToHomework</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>get</td>
+                        <td>/tests</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>get</td>
+                        <td>/test/start</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>get</td>
+                        <td>/test/finish</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>get</td>
+                        <td>/results</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                    <tr>
+                        <td>post</td>
+                        <td>/group</td>
+                        <td></td>
+                        <td><code></code></td>
+                        <td><sub></sub></td>
+                        <td class="text-dark">{status:""}</td>
+                    </tr>
+                   
+                
+                
+                </tbody>
+            </table>
+            <div style="height:100px"></div>
+
+            <div class="text-center container my-5">
+                <h1 class="display-4">Users</h1>
+                <table class="table table-bordered table-dark">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>name</th>
+                            <th>surname</th>
+                            <th>login</th>
+                            <th>password</th>
+                            <th>type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% allUsers.forEach(elm=> { %>
+                            <tr>
+                                <td>
+                                    <%= elm.id %>
+                                </td>
+                                <td>
+                                    <%= elm.name %>
+                                </td>
+                                <td>
+                                    <%= elm.surname %>
+                                </td>
+                                <td>
+                                    <%= elm.login %>
+                                </td>
+                                <td>
+                                    <%= elm.password %>
+                                </td>
+                                <td>
+                                    <%= elm.type %>
+
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
